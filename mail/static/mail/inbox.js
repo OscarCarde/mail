@@ -9,10 +9,11 @@ document.addEventListener('DOMContentLoaded', function() {
   // By default, load the inbox
   load_mailbox('inbox');
 
-  document.querySelector("#compose-form").onsubmit = () => {
+  document.querySelector("#compose-form").addEventListener("submit", event => {
+    event.preventDefault();
     send();
     load_mailbox('sent');
-  };
+  });
 });
 
 function compose_email() {
@@ -35,6 +36,17 @@ function load_mailbox(mailbox) {
 
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
+
+  if(mailbox === 'inbox') {
+    //let emails = getInboxMails();
+    console.log(getInboxMails());
+    emails.forEach(email => {
+      let email_p = document.createElement("p");
+      email_p.innerHTML = email["id"];
+      document.querySelector("#email-view").appendChild(email_p);
+      
+    });
+  }
 }
 
 function send() {
@@ -54,4 +66,10 @@ function send() {
   .then(result => {
     console.log(result)
   })
+}
+
+function getInboxMails() {
+  fetch("emails/inbox")
+  .then(response => response.json())
+  .then(emails =>  emails);
 }
