@@ -1,16 +1,10 @@
-<<<<<<< HEAD
-- [ ] Send Mail: When a user submits the email composition form, add JavaScript code to actually send the email.
-    - [x] You’ll likely want to make a POST request to /emails, passing in values for recipients, subject, and body.
-    - [ ] Once the email has been sent, load the user’s sent mailbox.
-=======
-
 ## Specification
 
 Using JavaScript, HTML, and CSS, complete the implementation of your single-page-app email client inside of inbox.js (and not additional or other files; for grading purposes, we’re only going to be considering inbox.js!). You must fulfill the following requirements:
 
-- [ ] Send Mail: When a user submits the email composition form, add JavaScript code to actually send the email.
+- [x] Send Mail: When a user submits the email composition form, add JavaScript code to actually send the email.
   - [x] You’ll likely want to make a POST request to /emails, passing in values for recipients, subject, and body.
-  - [ ] Once the email has been sent, load the user’s sent mailbox.
+  - [x] Once the email has been sent, load the user’s sent mailbox.
 - [ ] Mailbox: When a user visits their Inbox, Sent mailbox, or Archive, load the appropriate mailbox.
   - [ ] You’ll likely want to make a GET request to /emails/<mailbox> to request the emails for a particular mailbox.
   - [ ] When a mailbox is visited, the application should first query the API for the latest emails in that mailbox.
@@ -33,4 +27,3 @@ Using JavaScript, HTML, and CSS, complete the implementation of your single-page
   - [ ] Pre-fill the composition form with the recipient field set to whoever sent the original email.
   - [ ] Pre-fill the subject line. If the original email had a subject line of foo, the new subject line should be Re: foo. (If the subject line already begins with Re: , no need to add it again.)
   - [ ] Pre-fill the body of the email with a line like "On Jan 1 2020, 12:00 AM foo@example.com wrote:" followed by the original text of the email.
->>>>>>> main
