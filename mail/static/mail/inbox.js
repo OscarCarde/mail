@@ -10,9 +10,9 @@ document.addEventListener('DOMContentLoaded', function() {
   load_mailbox('inbox');
 
   document.querySelector("#compose-form").addEventListener("submit", event => {
-    event.preventDefault();
     send();
     load_mailbox('sent');
+    event.preventDefault();
   });
 });
 
@@ -38,8 +38,8 @@ function load_mailbox(mailbox) {
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
 
   if(mailbox === 'inbox') {
-    //let emails = getInboxMails();
-    console.log(getInboxMails());
+    let emails = getInboxMails();
+    console.log(emails);
     emails.forEach(email => {
       let email_p = document.createElement("p");
       email_p.innerHTML = email["id"];
