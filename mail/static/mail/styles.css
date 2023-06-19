@@ -12,3 +12,8 @@ textarea {
 .read {
     background-color: lightgrey;
 }
+
+#email-view * {
+    border-style: solid;
+    border-width: 1px;
+}

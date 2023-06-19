@@ -45,8 +45,9 @@ function load_mailbox(mailbox) {
       .then(emails => {
         if (emails.length > 0) {
           emails.forEach(email => {
-            let emailDiv = summariseEmail(email);
+            let emailDiv = summarise_email(email);
             document.querySelector("#emails-view").appendChild(emailDiv);
+            emailDiv.addEventListener('click', () => load_email(email));
           });
         } else {
           let noEmails = document.createElement('h3');
@@ -79,13 +80,7 @@ function send() {
   })
 }
 
-function getEMails(mailbox) {
-  fetch(`emails/${mailbox}`)
-    .then(response => response.json())
-    .then(emails =>  emails);
-}
-
-function summariseEmail(email) {
+function summarise_email(email) {
   let div = document.createElement('div');
   div.className = "summary-item";
 
@@ -108,4 +103,38 @@ function summariseEmail(email) {
   div.appendChild(timestamp);
 
   return div;
+}
+
+function load_email(email) {
+  document.querySelector('#emails-view').style.display = 'none';
+  let email_container = document.querySelector("#email-view");
+  fetch(`/emails/${email['id']}`)
+    .then(response => response.json())
+    .then(emailObj => {
+      //sender
+      let sender = document.createElement('h3');
+      sender.innerHTML = emailObj['sender'];
+      email_container.appendChild(sender);
+      //recipients
+      let recipients = emailObj['recipients'];
+      let recipients_list = recipients[0];
+      for(var i = 1; i<recipients.length; i++) {
+        recipients_list += ", " + recipients[i];
+      }
+      let recipientsCont = document.createElement('h4');
+      recipientsCont.innerHTML = recipients_list;
+      email_container.appendChild(recipientsCont);
+      //subject
+      let subject = document.createElement('h4');
+      subject.innerHTML = emailObj['subject'];
+      email_container.appendChild(subject);
+      //body
+      let body = document.createElement('p');
+      body.innerHTML = emailObj['body'];
+      email_container.appendChild(body);
+      //timestamp
+      let timestamp = document.createElement('p');
+      timestamp.innerHTML = email['timestamp'];
+      email_container.appendChild(timestamp);
+    })
 }
