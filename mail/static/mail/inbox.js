@@ -40,14 +40,13 @@ function load_mailbox(mailbox) {
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
 
-  if (mailbox === 'inbox') {
-    getInboxMails()
+    fetch(`emails/${mailbox}`)
+      .then(response => response.json())
       .then(emails => {
         if (emails.length > 0) {
           emails.forEach(email => {
-            let email_p = document.createElement("p");
-            email_p.innerHTML = email["id"];
-            document.querySelector("#emails-view").appendChild(email_p);
+            let emailDiv = summariseEmail(email);
+            document.querySelector("#emails-view").appendChild(emailDiv);
           });
         } else {
           let noEmails = document.createElement('h3');
@@ -58,7 +57,6 @@ function load_mailbox(mailbox) {
       .catch(error => {
         console.log("Something went wrong while trying to retreive the emails fom the API", error);
       });
-  }
 }
 
 
@@ -81,8 +79,33 @@ function send() {
   })
 }
 
-function getInboxMails() {
-  return fetch("emails/inbox")
+function getEMails(mailbox) {
+  fetch(`emails/${mailbox}`)
     .then(response => response.json())
     .then(emails =>  emails);
+}
+
+function summariseEmail(email) {
+  let div = document.createElement('div');
+  div.className = "summary-item";
+
+  if(email['read']) {
+    div.className += " read";
+  }
+  
+  //from
+  let from = document.createElement('h5');
+  from.innerHTML = email['sender'];
+  //subject
+  let subject = document.createElement('p');
+  subject.innerHTML = email['subject'];
+  //timestamp
+  let timestamp = document.createElement('p');
+  timestamp.innerHTML = email['timestamp'];
+
+  div.appendChild(from);
+  div.appendChild(subject);
+  div.appendChild(timestamp);
+
+  return div;
 }

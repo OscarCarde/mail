@@ -1,3 +1,14 @@
 textarea {
     min-height: 400px;
 }
+
+.summary-item {
+    border-style: solid;
+    border-width: 1px;
+    padding: 5px;
+    margin: 10px 0px;
+}
+
+.read {
+    background-color: lightgrey;
+}
