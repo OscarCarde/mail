@@ -47,7 +47,10 @@ function load_mailbox(mailbox) {
           emails.forEach(email => {
             let emailDiv = summarise_email(email);
             document.querySelector("#emails-view").appendChild(emailDiv);
-            emailDiv.addEventListener('click', () => load_email(email));
+            emailDiv.addEventListener('click', () => {
+              read(email);
+              load_email(email);
+            });
           });
         } else {
           let noEmails = document.createElement('h3');
@@ -60,6 +63,14 @@ function load_mailbox(mailbox) {
       });
 }
 
+function read(email) {
+  fetch(`/emails/${email['id']}`, {
+    method: 'PUT',
+    body: JSON.stringify({
+      read: true
+    })
+  })
+}
 
 function send() {
   let recipients = document.querySelector('#compose-recipients').value;
@@ -108,13 +119,13 @@ function summarise_email(email) {
 function load_email(email) {
   document.querySelector('#emails-view').style.display = 'none';
   let email_container = document.querySelector("#email-view");
+  
   fetch(`/emails/${email['id']}`)
     .then(response => response.json())
     .then(emailObj => {
       //sender
       let sender = document.createElement('h3');
       sender.innerHTML = emailObj['sender'];
-      email_container.appendChild(sender);
       //recipients
       let recipients = emailObj['recipients'];
       let recipients_list = recipients[0];
@@ -123,18 +134,25 @@ function load_email(email) {
       }
       let recipientsCont = document.createElement('h4');
       recipientsCont.innerHTML = recipients_list;
-      email_container.appendChild(recipientsCont);
       //subject
       let subject = document.createElement('h4');
       subject.innerHTML = emailObj['subject'];
-      email_container.appendChild(subject);
       //body
       let body = document.createElement('p');
       body.innerHTML = emailObj['body'];
-      email_container.appendChild(body);
       //timestamp
       let timestamp = document.createElement('p');
       timestamp.innerHTML = email['timestamp'];
+
+      let number_of_children = email_container.childNodes.length
+      for(var i = 0; i < number_of_children; i++) {
+        email_container.childNodes[0].remove();
+      }
+      
+      email_container.appendChild(sender);
+      email_container.appendChild(recipientsCont);
+      email_container.appendChild(subject);
+      email_container.appendChild(body);
       email_container.appendChild(timestamp);
     })
 }
