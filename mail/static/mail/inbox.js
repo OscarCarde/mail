@@ -23,6 +23,7 @@ function compose_email() {
 
   // Show compose view and hide other views
   document.querySelector('#emails-view').style.display = 'none';
+  document.querySelector('#email-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'block';
 
   // Clear out composition fields
@@ -35,6 +36,7 @@ function load_mailbox(mailbox) {
 
   // Show the mailbox and hide other views
   document.querySelector('#emails-view').style.display = 'block';
+  document.querySelector('#email-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'none';
 
   // Show the mailbox name
@@ -118,24 +120,26 @@ function summarise_email(email) {
 
 function load_email(email) {
   document.querySelector('#emails-view').style.display = 'none';
+  document.querySelector('#email-view').style.display = 'block';
   let email_container = document.querySelector("#email-view");
   
   fetch(`/emails/${email['id']}`)
     .then(response => response.json())
     .then(emailObj => {
       //sender
-      let sender = document.createElement('h3');
+      let sender = document.createElement('h4');
       sender.innerHTML = emailObj['sender'];
       //recipients
       let recipients = emailObj['recipients'];
-      let recipients_list = recipients[0];
+      let recipients_list = "To: " + recipients[0];
       for(var i = 1; i<recipients.length; i++) {
         recipients_list += ", " + recipients[i];
       }
-      let recipientsCont = document.createElement('h4');
+      let recipientsCont = document.createElement('p');
       recipientsCont.innerHTML = recipients_list;
+      recipientsCont.id = 'recipients';
       //subject
-      let subject = document.createElement('h4');
+      let subject = document.createElement('p');
       subject.innerHTML = emailObj['subject'];
       //body
       let body = document.createElement('p');
@@ -150,8 +154,9 @@ function load_email(email) {
       }
       
       email_container.appendChild(sender);
-      email_container.appendChild(recipientsCont);
       email_container.appendChild(subject);
+      email_container.appendChild(recipientsCont);
+      
       email_container.appendChild(body);
       email_container.appendChild(timestamp);
     })
