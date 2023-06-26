@@ -156,6 +156,7 @@ function load_email(email) {
       }
 
       if(email['sender'] != document.querySelector('#user').innerHTML) {
+        archive_button.style.display = 'block';
         archive_button.addEventListener('click', () => {
           let archived = !email['archived']
           fetch(`emails/${email['id']}`, {
