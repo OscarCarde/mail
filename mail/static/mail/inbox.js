@@ -127,7 +127,7 @@ function load_email(email) {
     .then(response => response.json())
     .then(emailObj => {
       //sender
-      let sender = document.createElement('h4');
+      let sender = document.querySelector('#sender');
       sender.innerHTML = emailObj['sender'];
       //recipients
       let recipients = emailObj['recipients'];
@@ -135,29 +135,39 @@ function load_email(email) {
       for(var i = 1; i<recipients.length; i++) {
         recipients_list += ", " + recipients[i];
       }
-      let recipientsCont = document.createElement('p');
+      let recipientsCont = document.querySelector('#recipients');
       recipientsCont.innerHTML = recipients_list;
-      recipientsCont.id = 'recipients';
       //subject
-      let subject = document.createElement('p');
+      let subject = document.querySelector('#subject');
       subject.innerHTML = emailObj['subject'];
       //body
-      let body = document.createElement('p');
+      let body = document.querySelector('#body');
       body.innerHTML = emailObj['body'];
       //timestamp
-      let timestamp = document.createElement('p');
+      let timestamp = document.querySelector('#timestamp');
       timestamp.innerHTML = email['timestamp'];
 
-      let number_of_children = email_container.childNodes.length
-      for(var i = 0; i < number_of_children; i++) {
-        email_container.childNodes[0].remove();
+      let archive_button = document.querySelector('#archive');
+      if(email['archived']){
+        archive_button.innerHTML = "Unarchive";
+        
+      } else {
+        archive_button.innerHTML = "Archive";
       }
-      
-      email_container.appendChild(sender);
-      email_container.appendChild(subject);
-      email_container.appendChild(recipientsCont);
-      
-      email_container.appendChild(body);
-      email_container.appendChild(timestamp);
+
+      if(email['sender'] != document.querySelector('#user').innerHTML) {
+        archive_button.addEventListener('click', () => {
+          let archived = !email['archived']
+          fetch(`emails/${email['id']}`, {
+            method: 'PUT',
+            body: JSON.stringify({
+              archived: archived
+            })
+          })
+          load_mailbox('inbox');
+        })
+      } else {
+        archive_button.style.display = 'none';
+      }
     })
 }

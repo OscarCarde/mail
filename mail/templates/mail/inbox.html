@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block body %}
-    <h2>{{ request.user.email }}</h2>
+    <h2 id="user">{{ request.user.email }}</h2>
 
     <button class="btn btn-sm btn-outline-primary" id="inbox">Inbox</button>
     <button class="btn btn-sm btn-outline-primary" id="compose">Compose</button>
@@ -15,6 +15,16 @@
     </div>
 
     <div id="email-view">
+        <div id="email-header">
+            <h4 id="sender"></h4>
+
+            <button class="btn btn-sm btn-outline-danger" id="archive"></button>
+        </div>
+        <p id="recipients"></p>
+        <p id="subject"></p>
+        <p id="body"></p>
+        <p id="timestamp"></p>
+
     </div>
 
     <div id="compose-view">
