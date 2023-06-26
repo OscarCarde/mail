@@ -146,5 +146,28 @@ function load_email(email) {
       //timestamp
       let timestamp = document.querySelector('#timestamp');
       timestamp.innerHTML = email['timestamp'];
+
+      let archive_button = document.querySelector('#archive');
+      if(email['archived']){
+        archive_button.innerHTML = "Unarchive";
+        
+      } else {
+        archive_button.innerHTML = "Archive";
+      }
+
+      if(email['sender'] != document.querySelector('#user').innerHTML) {
+        archive_button.addEventListener('click', () => {
+          let archived = !email['archived']
+          fetch(`emails/${email['id']}`, {
+            method: 'PUT',
+            body: JSON.stringify({
+              archived: archived
+            })
+          })
+          load_mailbox('inbox');
+        })
+      } else {
+        archive_button.style.display = 'none';
+      }
     })
 }
