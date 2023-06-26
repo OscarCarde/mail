@@ -170,5 +170,25 @@ function load_email(email) {
       } else {
         archive_button.style.display = 'none';
       }
+
+      let reply_button = document.querySelector("#reply");
+      reply_button.addEventListener('click', () => reply(email));
     })
+}
+
+function reply(email) {
+    // Show compose view and hide other views
+    document.querySelector('#emails-view').style.display = 'none';
+    document.querySelector('#email-view').style.display = 'none';
+    document.querySelector('#compose-view').style.display = 'block';
+
+    // Populate reply email
+  document.querySelector('#compose-recipients').value = email['sender'];
+  if(email['subject'].startsWith("Re: ")) {
+    document.querySelector('#compose-subject').value = email['subject'];
+  } else {
+    document.querySelector('#compose-subject').value = "Re: " + email['subject'];
+  }
+  
+  document.querySelector('#compose-body').value = `On ${email['timestamp']}, ${email['sender']} wrote: \n\n${email['body']}`;
 }
