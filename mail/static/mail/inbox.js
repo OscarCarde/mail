@@ -42,27 +42,27 @@ function load_mailbox(mailbox) {
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
 
-    fetch(`emails/${mailbox}`)
-      .then(response => response.json())
-      .then(emails => {
-        if (emails.length > 0) {
-          emails.forEach(email => {
-            let emailDiv = summarise_email(email);
-            document.querySelector("#emails-view").appendChild(emailDiv);
-            emailDiv.addEventListener('click', () => {
-              read(email);
-              load_email(email);
-            });
+  fetch(`emails/${mailbox}`)
+    .then(response => response.json())
+    .then(emails => {
+      if (emails.length > 0) {
+        emails.forEach(email => {
+          let emailDiv = summarise_email(email);
+          document.querySelector("#emails-view").appendChild(emailDiv);
+          emailDiv.addEventListener('click', () => {
+            read(email);
+            load_email(email);
           });
-        } else {
-          let noEmails = document.createElement('h3');
-          noEmails.innerHTML = "No emails";
-          document.querySelector("#emails-view").appendChild(noEmails);
+        });
+      } else {
+      let noEmails = document.createElement('h3');
+      noEmails.innerHTML = "No emails";
+      document.querySelector("#emails-view").appendChild(noEmails);
         }
-      })
-      .catch(error => {
-        console.log("Something went wrong while trying to retreive the emails fom the API", error);
-      });
+    })
+    .catch(error => {
+      console.log("Something went wrong while trying to retreive the emails fom the API", error);
+    });
 }
 
 function read(email) {
@@ -111,9 +111,7 @@ function summarise_email(email) {
   let timestamp = document.createElement('p');
   timestamp.innerHTML = email['timestamp'];
 
-  div.appendChild(from);
-  div.appendChild(subject);
-  div.appendChild(timestamp);
+  div.append(from, subject, timestamp);
 
   return div;
 }
@@ -121,7 +119,6 @@ function summarise_email(email) {
 function load_email(email) {
   document.querySelector('#emails-view').style.display = 'none';
   document.querySelector('#email-view').style.display = 'block';
-  let email_container = document.querySelector("#email-view");
   
   fetch(`/emails/${email['id']}`)
     .then(response => response.json())
@@ -165,7 +162,7 @@ function load_email(email) {
               archived: archived
             })
           })
-          load_mailbox('inbox');
+          location.reload();
         })
       } else {
         archive_button.style.display = 'none';
@@ -178,9 +175,9 @@ function load_email(email) {
 
 function reply(email) {
     // Show compose view and hide other views
-    document.querySelector('#emails-view').style.display = 'none';
-    document.querySelector('#email-view').style.display = 'none';
-    document.querySelector('#compose-view').style.display = 'block';
+  document.querySelector('#emails-view').style.display = 'none';
+  document.querySelector('#email-view').style.display = 'none';
+  document.querySelector('#compose-view').style.display = 'block';
 
     // Populate reply email
   document.querySelector('#compose-recipients').value = email['sender'];
