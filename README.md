@@ -1,3 +1,9 @@
+
+
+
+https://github.com/OscarCarde/mail/assets/68070683/ac75365d-f4d4-4d6d-9eb3-ad66b662bac1
+
+
 ## Specification
 
 Using JavaScript, HTML, and CSS, complete the implementation of your single-page-app email client inside of inbox.js (and not additional or other files; for grading purposes, we’re only going to be considering inbox.js!). You must fulfill the following requirements:
